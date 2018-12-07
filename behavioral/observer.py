@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+"""
+http://code.activestate.com/recipes/131499-observer-pattern/
+
+*TL;DR80
+Maintains a list of dependents and notifies them of any state changes.
+"""
+
 from __future__ import print_function
-"""http://code.activestate.com/recipes/131499-observer-pattern/"""
 
 
 class Subject(object):
-
     def __init__(self):
         self._observers = []
 
@@ -27,7 +33,6 @@ class Subject(object):
 
 # Example usage
 class Data(Subject):
-
     def __init__(self, name=''):
         Subject.__init__(self)
         self.name = name
@@ -44,17 +49,13 @@ class Data(Subject):
 
 
 class HexViewer:
-
     def update(self, subject):
-        print(u'HexViewer: Subject %s has data 0x%x' %
-              (subject.name, subject.data))
+        print(u'HexViewer: Subject %s has data 0x%x' % (subject.name, subject.data))
 
 
 class DecimalViewer:
-
     def update(self, subject):
-        print(u'DecimalViewer: Subject %s has data %d' %
-              (subject.name, subject.data))
+        print(u'DecimalViewer: Subject %s has data %d' % (subject.name, subject.data))
 
 
 # Example usage...

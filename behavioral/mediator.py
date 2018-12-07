@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""http://web.archive.org/web/20120309135549/http://dpip.testingperspective.com/?p=28"""
+
+"""
+http://web.archive.org/web/20120309135549/http://dpip.testingperspective.com/?p=28
+
+*TL;DR80
+Encapsulates how a set of objects interact.
+"""
 
 import random
 import time
 
 
 class TC:
-
     def __init__(self):
         self._tm = None
         self._bProblem = 0
@@ -40,7 +45,6 @@ class TC:
 
 
 class Reporter:
-
     def __init__(self):
         self._tm = None
 
@@ -57,7 +61,6 @@ class Reporter:
 
 
 class DB:
-
     def __init__(self):
         self._tm = None
 
@@ -77,7 +80,6 @@ class DB:
 
 
 class TestManager:
-
     def __init__(self):
         self._reporter = None
         self._db = None

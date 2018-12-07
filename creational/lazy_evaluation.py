@@ -6,7 +6,7 @@ Lazily-evaluated property pattern in Python.
 
 https://en.wikipedia.org/wiki/Lazy_evaluation
 
-References:
+*References:
 bottle
 https://github.com/bottlepy/bottle/blob/cafc15419cbb4a6cb748e6ecdccf92893bb25ce5/bottle.py#L270
 django
@@ -17,6 +17,9 @@ pyramimd
 https://github.com/Pylons/pyramid/blob/7909e9503cdfc6f6e84d2c7ace1d3c03ca1d8b73/pyramid/decorator.py#L4
 werkzeug
 https://github.com/pallets/werkzeug/blob/5a2bf35441006d832ab1ed5a31963cbc366c99ac/werkzeug/utils.py#L35
+
+*TL;DR80
+Delays the eval of an expr until its value is needed and avoids repeated evals.
 """
 
 from __future__ import print_function
@@ -24,7 +27,6 @@ import functools
 
 
 class lazy_property(object):
-
     def __init__(self, function):
         self.function = function
         functools.update_wrapper(self, function)
@@ -37,17 +39,34 @@ class lazy_property(object):
         return val
 
 
-class Person(object):
+def lazy_property2(fn):
+    attr = '_lazy__' + fn.__name__
 
+    @property
+    def _lazy_property(self):
+        if not hasattr(self, attr):
+            setattr(self, attr, fn(self))
+        return getattr(self, attr)
+
+    return _lazy_property
+
+
+class Person(object):
     def __init__(self, name, occupation):
         self.name = name
         self.occupation = occupation
+        self.call_count2 = 0
 
     @lazy_property
     def relatives(self):
         # Get all relatives, let's assume that it costs much time.
         relatives = "Many relatives."
         return relatives
+
+    @lazy_property2
+    def parents(self):
+        self.call_count2 += 1
+        return "Father and mother"
 
 
 def main():
@@ -58,6 +77,10 @@ def main():
     print(u"Jhon's relatives: {0}".format(Jhon.relatives))
     print(u"After we've accessed `relatives`:")
     print(Jhon.__dict__)
+    print(Jhon.parents)
+    print(Jhon.__dict__)
+    print(Jhon.parents)
+    print(Jhon.call_count2)
 
 
 if __name__ == '__main__':
@@ -66,7 +89,11 @@ if __name__ == '__main__':
 ### OUTPUT ###
 # Name: Jhon    Occupation: Coder
 # Before we access `relatives`:
-# {'name': 'Jhon', 'occupation': 'Coder'}
+# {'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
 # Jhon's relatives: Many relatives.
 # After we've accessed `relatives`:
-# {'relatives': 'Many relatives.', 'name': 'Jhon', 'occupation': 'Coder'}
+# {'relatives': 'Many relatives.', 'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
+# Father and mother
+# {'_lazy__parents': 'Father and mother', 'relatives': 'Many relatives.', 'call_count2': 1, 'name': 'Jhon', 'occupation': 'Coder'}  # noqa flake8
+# Father and mother
+# 1

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+""
+
 
 class GraphSearch:
 
@@ -18,7 +20,7 @@ class GraphSearch:
             return path
         for node in self.graph.get(start, []):
             if node not in path:
-                newpath = self.find_path(node, end, path)
+                newpath = self.find_path(node, end, path[:])
                 if newpath:
                     return newpath
 
@@ -49,14 +51,9 @@ class GraphSearch:
                         shortest = newpath
         return shortest
 
+
 # example of graph usage
-graph = {'A': ['B', 'C'],
-         'B': ['C', 'D'],
-         'C': ['D'],
-         'D': ['C'],
-         'E': ['F'],
-         'F': ['C']
-         }
+graph = {'A': ['B', 'C'], 'B': ['C', 'D'], 'C': ['D'], 'D': ['C'], 'E': ['F'], 'F': ['C']}
 
 # initialization of new graph search object
 graph1 = GraphSearch(graph)

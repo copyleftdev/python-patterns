@@ -1,11 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""http://ginstrom.com/scribbles/2008/11/06/generic-adapter-class-in-python/"""
+"""
+*What is this pattern about?
+The Adapter pattern provides a different interface for a class. We can
+think about it as a cable adapter that allows you to charge a phone
+somewhere that has outlets in a different shape. Following this idea,
+the Adapter pattern is useful to integrate classes that couldn't be
+integrated due to their incompatible interfaces.
+
+*What does this example do?
+
+The example has classes that represent entities (Dog, Cat, Human, Car)
+that make different noises. The Adapter class provides a different
+interface to the original methods that make such noises. So the
+original interfaces (e.g., bark and meow) are available under a
+different name: make_noise.
+
+*Where is the pattern used practically?
+The Grok framework uses adapters to make objects work with a
+particular API without modifying the objects themselves:
+http://grok.zope.org/doc/current/grok_overview.html#adapters
+
+*References:
+http://ginstrom.com/scribbles/2008/11/06/generic-adapter-class-in-python/
+https://sourcemaking.com/design_patterns/adapter
+http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#adapter
+
+*TL;DR80
+Allows the interface of an existing class to be used as another interface.
+"""
 
 
 class Dog(object):
-
     def __init__(self):
         self.name = "Dog"
 
@@ -14,7 +41,6 @@ class Dog(object):
 
 
 class Cat(object):
-
     def __init__(self):
         self.name = "Cat"
 
@@ -23,7 +49,6 @@ class Cat(object):
 
 
 class Human(object):
-
     def __init__(self):
         self.name = "Human"
 
@@ -32,7 +57,6 @@ class Human(object):
 
 
 class Car(object):
-
     def __init__(self):
         self.name = "Car"
 
@@ -44,8 +68,8 @@ class Adapter(object):
     """
     Adapts an object by replacing methods.
     Usage:
-    dog = Dog
-    dog = Adapter(dog, dict(make_noise=dog.bark))
+    dog = Dog()
+    dog = Adapter(dog, make_noise=dog.bark)
 
     >>> objects = []
     >>> dog = Dog()
@@ -83,6 +107,7 @@ class Adapter(object):
         """Print original object dict"""
         return self.obj.__dict__
 
+
 def main():
 
     objects = []
@@ -107,7 +132,7 @@ if __name__ == "__main__":
 
 ### OUTPUT ###
 # {'name': 'Dog'}
-# {'make_noise': <bound method Dog.bark of <__main__.Dog object at 0x7f631ba3fb00>>, 'obj': <__main__.Dog object at 0x7f631ba3fb00>}
+# {'make_noise': <bound method Dog.bark of <__main__.Dog object at 0x7f631ba3fb00>>, 'obj': <__main__.Dog object at 0x7f631ba3fb00>}    # noqa flake8
 # {'name': 'Dog'}
 # A Dog goes woof!
 # A Cat goes meow!

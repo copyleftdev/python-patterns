@@ -1,14 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""http://www.dabeaz.com/coroutines/"""
+
+"""
+*What is this pattern about?
+This pattern aims to decouple the senders of a request from its
+receivers. It does this by allowing a request to move through chained
+objects until it is handled by an appropriate receiver.
+
+This is useful as it reduces the number of connections between objects,
+since the sender does not need explicit knowledge of the handler, and
+the receiver won't need to refer to all potential receivers, but keeps
+a reference to a single successor.
+
+*References:
+http://www.dabeaz.com/coroutines/
+
+*TL;DR80
+Allow a request to pass down a chain of objects until an object handles
+the request.
+"""
 
 from contextlib import contextmanager
 import os
 import sys
 import time
+import abc
 
 
 class Handler(object):
+    __metaclass__ = abc.ABCMeta
 
     def __init__(self, successor=None):
         self._successor = successor
@@ -18,12 +38,12 @@ class Handler(object):
         if not res:
             self._successor.handle(request)
 
+    @abc.abstractmethod
     def _handle(self, request):
         raise NotImplementedError('Must provide implementation in subclass.')
 
 
 class ConcreteHandler1(Handler):
-
     def _handle(self, request):
         if 0 < request <= 10:
             print('request {} handled in handler 1'.format(request))
@@ -31,7 +51,6 @@ class ConcreteHandler1(Handler):
 
 
 class ConcreteHandler2(Handler):
-
     def _handle(self, request):
         if 10 < request <= 20:
             print('request {} handled in handler 2'.format(request))
@@ -39,7 +58,6 @@ class ConcreteHandler2(Handler):
 
 
 class ConcreteHandler3(Handler):
-
     def _handle(self, request):
         if 20 < request <= 30:
             print('request {} handled in handler 3'.format(request))
@@ -47,17 +65,14 @@ class ConcreteHandler3(Handler):
 
 
 class DefaultHandler(Handler):
-
     def _handle(self, request):
         print('end of chain, no handler for {}'.format(request))
         return True
 
 
 class Client(object):
-
     def __init__(self):
-        self.handler = ConcreteHandler1(
-            ConcreteHandler3(ConcreteHandler2(DefaultHandler())))
+        self.handler = ConcreteHandler1(ConcreteHandler3(ConcreteHandler2(DefaultHandler())))
 
     def delegate(self, requests):
         for request in requests:
@@ -69,6 +84,7 @@ def coroutine(func):
         cr = func(*args, **kwargs)
         next(cr)
         return cr
+
     return start
 
 
@@ -110,7 +126,6 @@ def default_coroutine():
 
 
 class ClientCoroutine:
-
     def __init__(self):
         self.target = coroutine1(coroutine3(coroutine2(default_coroutine())))
 
@@ -120,12 +135,12 @@ class ClientCoroutine:
 
 
 def timeit(func):
-
     def count(*args, **kwargs):
         start = time.time()
         res = func(*args, **kwargs)
         count._time = time.time() - start
         return res
+
     return count
 
 
@@ -153,7 +168,7 @@ if __name__ == "__main__":
     with suppress_stdout():
         client1_delegate(requests)
         client2_delegate(requests)
-    # lets check what is faster
+    # lets check which is faster
     print(client1_delegate._time, client2_delegate._time)
 
 ### OUTPUT ###

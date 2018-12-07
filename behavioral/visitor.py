@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 """
 http://peter-hoffmann.com/2010/extrinsic-visitor-pattern-python-inheritance.html
+
+*TL;DR80
+Separates an algorithm from an object structure on which it operates.
 """
 
 
@@ -22,7 +26,6 @@ class C(A, B):
 
 
 class Visitor(object):
-
     def visit(self, node, *args, **kwargs):
         meth = None
         for cls in node.__class__.__mro__:

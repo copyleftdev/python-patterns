@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""http://code.activestate.com/recipes/413838-memento-closure/"""
+
+"""
+http://code.activestate.com/recipes/413838-memento-closure/
+
+*TL;DR80
+Provides the ability to restore an object to its previous state.
+"""
 
 from copy import copy
 from copy import deepcopy
@@ -21,6 +27,7 @@ class Transaction(object):
 
     This is, in fact, just syntactic sugar around a memento closure.
     """
+
     deep = False
     states = []
 
@@ -59,7 +66,6 @@ class Transactional(object):
 
 
 class NumObj(object):
-
     def __init__(self, value):
         self.value = value
 

@@ -1,13 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""http://codesnipers.com/?q=python-flyweights"""
+"""
+*What is this pattern about?
+This pattern aims to minimise the number of objects that are needed by
+a program at run-time. A Flyweight is an object shared by multiple
+contexts, and is indistinguishable from an object that is not shared.
+
+The state of a Flyweight should not be affected by it's context, this
+is known as its intrinsic state. The decoupling of the objects state
+from the object's context, allows the Flyweight to be shared.
+
+*What does this example do?
+The example below sets-up an 'object pool' which stores initialised
+objects. When a 'Card' is created it first checks to see if it already
+exists instead of creating a new one. This aims to reduce the number of
+objects initialised by the program.
+
+*References:
+http://codesnipers.com/?q=python-flyweights
+
+*TL;DR80
+Minimizes memory usage by sharing data with other similar objects.
+"""
 
 import weakref
 
 
 class FlyweightMeta(type):
-
     def __new__(mcs, name, parents, dct):
         """
         Set up object pool
@@ -37,7 +57,7 @@ class FlyweightMeta(type):
         pool = getattr(cls, 'pool', {})
 
         instance = pool.get(key)
-        if not instance:
+        if instance is None:
             instance = super(FlyweightMeta, cls).__call__(*args, **kwargs)
             pool[key] = instance
         return instance
@@ -46,10 +66,12 @@ class FlyweightMeta(type):
 class Card(object):
 
     """The object pool. Has builtin reference counting"""
+
     _CardPool = weakref.WeakValueDictionary()
 
     """Flyweight implementation. If the object exists in the
     pool just return it (instead of creating a new one)"""
+
     def __new__(cls, value, suit):
         obj = Card._CardPool.get(value + suit)
         if not obj:
@@ -71,7 +93,6 @@ def with_metaclass(meta, *bases):
 
 
 class Card2(with_metaclass(FlyweightMeta)):
-
     def __init__(self, *args, **kwargs):
         # print('Init {}: {}'.format(self.__class__, (args, kwargs)))
         pass

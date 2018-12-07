@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+"""
+*TL;DR80
+Encapsulates all information needed to perform an action or trigger an event.
+"""
+
 from __future__ import print_function
 import os
 from os.path import lexists
 
 
 class MoveFileCommand(object):
-
     def __init__(self, src, dest):
         self.src = src
         self.dest = dest
@@ -30,9 +35,9 @@ def main():
     command_stack.append(MoveFileCommand('bar.txt', 'baz.txt'))
 
     # verify that none of the target files exist
-    assert(not lexists("foo.txt"))
-    assert(not lexists("bar.txt"))
-    assert(not lexists("baz.txt"))
+    assert not lexists("foo.txt")
+    assert not lexists("bar.txt")
+    assert not lexists("baz.txt")
     try:
         with open("foo.txt", "w"):  # Creating the file
             pass
@@ -46,6 +51,7 @@ def main():
             cmd.undo()
     finally:
         os.unlink("foo.txt")
+
 
 if __name__ == "__main__":
     main()

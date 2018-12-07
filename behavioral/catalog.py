@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 """
 A class that uses different static function depending of a parameter passed in
 init. Note the use of a single dictionary instead of multiple conditions
 """
-__author__ = "Ibrahim Diop <http://ibrahim.zinaria.com>"
-__gist__ = "<https://gist.github.com/diopib/7679559>"
+
+__author__ = "Ibrahim Diop <ibrahim@sikilabs.com>"
 
 
 class Catalog(object):
@@ -19,8 +20,7 @@ class Catalog(object):
         # dictionary that will be used to determine which static method is
         # to be executed but that will be also used to store possible param
         # value
-        self._static_method_choices = {'param_value_1': self._static_method_1,
-                                       'param_value_2': self._static_method_2}
+        self._static_method_choices = {'param_value_1': self._static_method_1, 'param_value_2': self._static_method_2}
 
         # simple test to validate param value
         if param in self._static_method_choices.keys():
@@ -67,8 +67,7 @@ class CatalogInstance(object):
     def _instance_method_2(self):
         print("Value {}".format(self.x2))
 
-    _instance_method_choices = {'param_value_1': _instance_method_1,
-                                'param_value_2': _instance_method_2}
+    _instance_method_choices = {'param_value_1': _instance_method_1, 'param_value_2': _instance_method_2}
 
     def main_method(self):
         """will execute either _instance_method_1 or _instance_method_2
@@ -103,8 +102,7 @@ class CatalogClass(object):
     def _class_method_2(cls):
         print("Value {}".format(cls.x2))
 
-    _class_method_choices = {'param_value_1': _class_method_1,
-                             'param_value_2': _class_method_2}
+    _class_method_choices = {'param_value_1': _class_method_1, 'param_value_2': _class_method_2}
 
     def main_method(self):
         """will execute either _class_method_1 or _class_method_2
@@ -136,8 +134,7 @@ class CatalogStatic(object):
     def _static_method_2():
         print("executed method 2!")
 
-    _static_method_choices = {'param_value_1': _static_method_1,
-                              'param_value_2': _static_method_2}
+    _static_method_choices = {'param_value_1': _static_method_1, 'param_value_2': _static_method_2}
 
     def main_method(self):
         """will execute either _static_method_1 or _static_method_2
@@ -166,6 +163,7 @@ def main():
 
     test = CatalogStatic('param_value_1')
     test.main_method()
+
 
 if __name__ == "__main__":
 

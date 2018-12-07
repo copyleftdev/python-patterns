@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+"""
+*TL;DR80
+Provides an interface to resource that is expensive to duplicate.
+"""
+
 from __future__ import print_function
 import time
 
@@ -29,8 +35,7 @@ class NoTalkProxy(Proxy):
     def talk(self):
         print("Proxy checking for Sales Manager availability")
         time.sleep(0.1)
-        print("This Sales Manager will not talk to you",
-              "whether he/she is busy or not")
+        print("This Sales Manager will not talk to you", "whether he/she is busy or not")
 
 
 if __name__ == '__main__':
